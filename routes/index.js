@@ -3,8 +3,8 @@ import AppController from '../controllers/AppController';
 
 const router = express.Router();
 
-// API endpoints
+// Define your API endpoints
 router.get('/status', AppController.getStatus);
-router.get('/status', AppController.getStatus);
+router.get('/stats', AppController.getStats);
 
 export default router;
