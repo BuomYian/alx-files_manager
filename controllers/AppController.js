@@ -1,28 +1,32 @@
-import dbClient from '../utils/db';
-import redisClient from '../utils/redis';
+const { isAlive: isRedisAlive } = require('../utils/redis');
+const DBClient = require('../utils/db');
 
-class AppController {
-  static async getStatus(req, res) {
-    // Check if Redis and DB are alive
-    const redisStatus = redisClient.isAlive();
-    const dbStatus = await dbClient.isAlive();
+const AppController = {
+  async getStatus(req, res) {
+    const redisIsAlive = isRedisAlive();
+    let dbIsAlive;
 
-    // Respond with status
-    res.status(200).json({ redis: redisStatus, db: dbStatus });
-  }
-
-  static async getStats(req, res) {
     try {
-      // Get the number of users and files from the database
-      const numUsers = await dbClient.nbUsers();
-      const numFiles = await dbClient.nbFiles();
-
-      // Respond with the stats
-      res.status(200).json({ users: numUsers, files: numFiles });
+      dbIsAlive = await DBClient.isAlive();
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+      dbIsAlive = false;
     }
-  }
-}
 
-export default AppController;
+    return res.status(200).json({
+      redis: redisIsAlive,
+      db: dbIsAlive,
+    });
+  },
+
+  async getStats(req, res) {
+    const usersCount = await DBClient.nbUsers();
+    const filesCount = await DBClient.nbFiles();
+
+    return res.status(200).json({
+      users: usersCount,
+      files: filesCount,
+    });
+  },
+};
+
+module.exports = AppController;
