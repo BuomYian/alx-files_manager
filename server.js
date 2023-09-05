@@ -1,11 +1,12 @@
-const express = require('express');
-const db = require('./utils/db');
-const { redisClient, isAlive: isRedisAlive } = require('./utils/redis');
-const routes = require('./routes');
+import express from 'express';
+import routes from './routes/index';
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(express.json());
+
+// Load routes from routes/index.js
 app.use('/', routes);
 
 app.listen(port, () => {
