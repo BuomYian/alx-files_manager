@@ -1,5 +1,5 @@
-const { isAlive: isRedisAlive } = require('../utils/redis');
-const DBClient = require('../utils/db');
+import { isRedisAlive } from '../utils/redis';
+import DBClient from '../utils/db';
 
 const AppController = {
   async getStatus(req, res) {

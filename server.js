@@ -4,7 +4,7 @@ const app = express();
 const port = process.env.PORT || 5000; // Use PORT environment variable or default to 5000
 
 // Import routes from the routes/index.js file
-const routes = require('./routes');
+import routes from './routes/index';
 
 // Middleware to parse JSON requests
 app.use(express.json());
